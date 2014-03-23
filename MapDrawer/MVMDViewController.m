@@ -28,7 +28,11 @@
     
     self.scrollView.contentSize = myView.bounds.size;
     [self.scrollView addSubview:myView];
+    self.scrollView.delegate = self;
     [myView setNeedsDisplay];
+    self.scrollView.minimumZoomScale = self.scrollView.frame.size.width / myView.frame.size.width;
+     self.scrollView.maximumZoomScale = 2.0;
+    [ self.scrollView setZoomScale: self.scrollView.minimumZoomScale];
 	// Do any additional setup after loading the view, typically from a nib.
     
 }
@@ -38,5 +42,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 
 @end

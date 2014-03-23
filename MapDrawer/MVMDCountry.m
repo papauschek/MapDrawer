@@ -10,4 +10,7 @@
 
 @implementation MVMDCountry
 
+-(NSInteger)getArea{
+    return [[self.borders objectAtIndex:0] count];
+}
 @end

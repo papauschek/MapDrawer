@@ -35,6 +35,10 @@
             [self.countries addObject:country];
         }
     }
+    
+   [self.countries sortUsingComparator:^NSComparisonResult(MVMDCountry *obj1, MVMDCountry *obj2) {
+       return [obj1 getArea] < [obj2 getArea];
+   }];
 }
 
 -(void)setMapBoundariesFrom:(NSArray *)boundaryBox{

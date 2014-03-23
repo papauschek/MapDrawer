@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MVMDViewController : UIViewController
+@interface MVMDViewController : UIViewController <UIScrollViewDelegate>
 
 -(UIImage *)drawCountriesWithData:(NSArray *)countries;
 

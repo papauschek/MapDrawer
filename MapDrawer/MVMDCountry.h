@@ -14,4 +14,5 @@
 @property (nonatomic, strong) NSArray* borders;
 @property (nonatomic, strong) NSArray* holes;
 
+-(NSInteger)getArea;
 @end
