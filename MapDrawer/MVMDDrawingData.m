@@ -59,7 +59,14 @@
             }
         }
     }else if([type isEqualToString:@"MultiPolygon"]){
-        
+        for(NSArray* array in coordinates){
+            [borders addObject:[array objectAtIndex:0]];
+            if([array count] > 1){
+                for(int i = 1; i<[array count]; i++){
+                    [holes addObject:[array objectAtIndex:i]];
+                }
+            }
+        }
     }
     country.borders = borders;
     country.holes = holes;
