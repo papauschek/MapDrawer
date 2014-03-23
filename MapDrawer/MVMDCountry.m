@@ -10,6 +10,7 @@
 
 @implementation MVMDCountry
 
+//method returns the number of points in the country shape. This was done to help solve the bug of Lesotho not showing because it was drawn before SouthAfrica
 -(NSInteger)getArea{
     return [[self.borders objectAtIndex:0] count];
 }

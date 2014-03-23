@@ -20,11 +20,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //This object obtains the data from the json file when created
     MVMDDrawingData *dd = [[MVMDDrawingData alloc] init];
     
+    //This view is passed the object with the information to draw
     CGRect viewRect = CGRectMake(0, 0, 2000, 2000);
     self.myView = [[MVMDMapView alloc] initWithFrame:viewRect andData:dd];
     
+    //scrollView is used to pan and zoom around the image, in this case the map
     self.scrollView.contentSize = self.myView.bounds.size;
     [self.scrollView addSubview:self.myView];
     self.scrollView.delegate = self;
@@ -35,6 +39,7 @@
 
     
 }
+// delegate method for zooming
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return self.myView;
 }

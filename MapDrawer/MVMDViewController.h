@@ -10,7 +10,7 @@
 #import "MVMDMapView.h"
 
 @interface MVMDViewController : UIViewController <UIScrollViewDelegate>
-@property (strong, nonatomic) MVMDMapView* myView;
--(UIImage *)drawCountriesWithData:(NSArray *)countries;
+@property (strong, nonatomic) MVMDMapView* myView; //View where the map will be drawn
+
 
 @end

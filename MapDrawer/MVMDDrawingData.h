@@ -10,6 +10,7 @@
 
 @interface MVMDDrawingData : NSObject
 
+//Properties that represent the list of countries and the boundaries of the map
 @property (nonatomic, strong) NSMutableArray* countries;
 @property (nonatomic, strong) NSNumber* maximumLongitude;
 @property (nonatomic, strong) NSNumber* minimumLongitude;
@@ -17,6 +18,5 @@
 @property (nonatomic, strong) NSNumber* minimumLatitude;
 
 
--(void)extractUsefulInformation:(NSData *)data;
 
 @end

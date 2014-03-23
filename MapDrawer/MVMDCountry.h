@@ -10,6 +10,7 @@
 
 @interface MVMDCountry : NSObject
 
+//properties extracted from the json will be put in here
 @property (nonatomic) NSString* name;
 @property (nonatomic, strong) NSArray* borders;
 @property (nonatomic, strong) NSArray* holes;
