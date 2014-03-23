@@ -14,7 +14,7 @@
 -(id)init{
     self = [super init];
     if(self != nil) {
-        self.countries = [[NSMutableArray alloc]init];
+        self.countries = [[NSMutableArray alloc] init];
         [self extractUsefulInformation];
     }
     return self;
@@ -29,7 +29,7 @@
     if([dataObject isKindOfClass:[NSDictionary class]]){
         [self setMapBoundariesFrom:[dataObject objectForKey:@"bbox"]];
         for (NSDictionary* countryData in [dataObject objectForKey:@"features"]){
-            MVMDCountry *country = [[MVMDCountry alloc]init];
+            MVMDCountry *country = [[MVMDCountry alloc] init];
             country.name = [[countryData objectForKey:@"properties"] objectForKey:@"name"];
             [self setCountryBordersAndHolesFrom:[countryData objectForKey:@"geometry"] to:country];
             [self.countries addObject:country];
@@ -45,7 +45,7 @@
 }
 
 -(void)setCountryBordersAndHolesFrom:(NSDictionary *)geometry to:(MVMDCountry *)country{
-    NSMutableArray *borders = [[NSMutableArray alloc]init];
+    NSMutableArray *borders = [[NSMutableArray alloc] init];
     NSMutableArray *holes;
     NSString *type = [geometry objectForKey:@"type"];
     NSArray *coordinates = [geometry objectForKey:@"coordinates"];
@@ -54,7 +54,7 @@
         
         [borders addObject:[coordinates objectAtIndex:0]];
         if([coordinates count] > 1){
-            holes = [[NSMutableArray alloc]init];
+            holes = [[NSMutableArray alloc] init];
             for(int i = 1; i<[coordinates count]; i++){
                 [holes addObject:[coordinates objectAtIndex:i]];
             }
@@ -63,7 +63,7 @@
         for(NSArray* array in coordinates){
             [borders addObject:[array objectAtIndex:0]];
             if([array count] > 1){
-                holes = [[NSMutableArray alloc]init];
+                holes = [[NSMutableArray alloc] init];
                 for(int i = 1; i<[array count]; i++){
                     [holes addObject:[array objectAtIndex:i]];
                 }

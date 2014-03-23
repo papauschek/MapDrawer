@@ -8,23 +8,30 @@
 
 #import "MVMDMapView.h"
 #import "MVMDDrawingData.h"
+#import "MVMDCountry.h"
 
 @implementation MVMDMapView
 
-//- (id)initWithFrame:(CGRect)frame
-//{
-//    self = [super initWithFrame:frame];
-//    if (self) {
-//        self.backgroundColor = UIColor.whiteColor;
-//    }
-//    return self;
-//}
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.backgroundColor = UIColor.whiteColor;
+    }
+    return self;
+}
 
 - (id)initWithFrame:(CGRect)frame andData:(MVMDDrawingData *)drawingData
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.countries = drawingData.countries;
+        self.countries        = drawingData.countries;
+        self.maximumLongitude = [drawingData.maximumLongitude floatValue];
+        self.maximumLatitude  = [drawingData.maximumLatitude floatValue];
+        self.minimumLongitude = [drawingData.minimumLongitude floatValue];
+        self.minimumLatitude  = [drawingData.minimumLatitude floatValue];
+        
+        
         self.backgroundColor = UIColor.whiteColor;
     }
     return self;
@@ -35,26 +42,69 @@
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
-    for(NSArray *country in self.countries){
-        NSArray *borders = [country objectAtIndex:1];
-        NSArray *holes = [country objectAtIndex:2];
-        if([borders count] > 1){
-            for(NSArray *border in borders){
-                //code translating the coordinates here
+    NSLog(@"I Started Drawing");
+    for(MVMDCountry *country in self.countries){
+        
+        if(country.borders){
+            for(NSArray *borders in country.borders){
+                [self drawPolygonFromArrayOfPoints:borders withColour: [UIColor grayColor]];
+                NSLog(@"Drawing %@ now", country.name);
             }
         }
-        if(holes){
-            for(NSArray *hole in holes){
-                //more code translation and drawing
+        if(country.holes){
+            for(NSArray *holes in country.holes){
+                [self drawPolygonFromArrayOfPoints:holes withColour:[UIColor whiteColor]];
             }
         }
     }
 }
 
-#pragma to-do
-////
-//- (CGPoint)geojsonCoordinateToCGPoint:(id)geojsonpoint withinRect:(CGRect)bounds{
-//    
-//}
+
+-(CGPoint)translateCoodinatesToCGPointWithLongitude:(CGFloat)longitude andLatitude: (CGFloat)latitude{
+    CGFloat trueLongitude;
+    CGFloat trueLatitude;
+    if(longitude > 0){
+        trueLongitude = fabsf(self.minimumLongitude) + longitude;
+    }
+    else{
+        trueLongitude = self.minimumLongitude - longitude;
+    }
+    if(latitude > 0){
+        trueLatitude = self.maximumLatitude - latitude;
+    }
+    else{
+        trueLatitude = self.maximumLatitude + fabsf(latitude);
+    }
+    
+    return CGPointMake(longitude, latitude);
+}
+
+-(void)drawPolygonFromArrayOfPoints:(NSArray *)array withColour:(UIColor *) color{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextSetStrokeColorWithColor(context, color.CGColor);
+    CGContextSetRGBFillColor(context, 0.0, 0.0, 1.0, 1.0);
+    
+    // Draw them with a 2.0 stroke width so they are a bit more visible.
+    CGContextSetLineWidth(context, 2.0);
+    
+
+    for(int i = 0; i < [array count]; i++)
+    {
+        
+        CGPoint point = [self translateCoodinatesToCGPointWithLongitude: [[[array objectAtIndex:i] objectAtIndex:0] floatValue]
+                                                             andLatitude:[[[array objectAtIndex:i] objectAtIndex:1] floatValue]];
+        if(i == 0)
+        {
+            CGContextMoveToPoint(context, point.x, point.y);
+        }
+        else
+        {
+            CGContextAddLineToPoint(context, point.x, point.y);
+        }
+    }
+    
+    CGContextStrokePath(context);
+}
 
 @end

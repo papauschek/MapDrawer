@@ -13,4 +13,9 @@
 @interface MVMDMapView : UIView
 
 @property (nonatomic, strong) NSArray* countries;
+@property (nonatomic, assign) CGFloat maximumLongitude;
+@property (nonatomic, assign) CGFloat minimumLongitude;
+@property (nonatomic, assign) CGFloat maximumLatitude;
+@property (nonatomic, assign) CGFloat minimumLatitude;
+- (id)initWithFrame:(CGRect)frame andData:(MVMDDrawingData *)drawingData;
 @end
