@@ -64,19 +64,19 @@
     CGFloat trueLatitude;
     if(longitude > 0){
         trueLongitude = fabsf(self.minimumLongitude) + longitude;
-        trueLongitude = (trueLongitude*320)/width;
+        trueLongitude = (trueLongitude*self.bounds.size.width)/width;
     }
     else{
-        trueLongitude = self.minimumLongitude - longitude;
-        trueLongitude = (trueLongitude*320)/width;
+        trueLongitude = longitude - self.minimumLongitude;
+        trueLongitude = (trueLongitude*self.bounds.size.width)/width;
     }
     if(latitude > 0){
         trueLatitude = self.maximumLatitude - latitude;
-        trueLatitude = (trueLatitude*568)/height;
+        trueLatitude = (trueLatitude*self.bounds.size.height)/height;
     }
     else{
         trueLatitude = self.maximumLatitude + fabsf(latitude);
-        trueLatitude = (trueLatitude*568)/height;
+        trueLatitude = (trueLatitude*self.bounds.size.height    )/height;
     }
     NSLog(@"True values are %f and %f", trueLongitude, trueLatitude);
     return CGPointMake(trueLongitude, trueLatitude);
@@ -85,8 +85,8 @@
 -(void)drawPolygonFromArrayOfPoints:(NSArray *)array withColour:(UIColor *) color{
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    CGContextSetStrokeColorWithColor(context, color.CGColor);
-    CGContextSetRGBFillColor(context, 0.0, 0.0, 1.0, 1.0);
+    //CGContextSetStrokeColorWithColor(context, color.CGColor);
+    CGContextSetFillColorWithColor(context, color.CGColor);
     
     // Draw them with a 2.0 stroke width so they are a bit more visible.
     CGContextSetLineWidth(context, 2.0);
@@ -106,8 +106,8 @@
             CGContextAddLineToPoint(context, point.x, point.y);
         }
     }
-    
-    CGContextStrokePath(context);
+    CGContextFillPath(context);
+   // CGContextStrokePath(context);
 }
 
 @end
