@@ -30,9 +30,7 @@
         self.maximumLatitude  = [drawingData.maximumLatitude floatValue];
         self.minimumLongitude = [drawingData.minimumLongitude floatValue];
         self.minimumLatitude  = [drawingData.minimumLatitude floatValue];
-        
-        
-        self.backgroundColor = UIColor.whiteColor;
+        self.backgroundColor  = [UIColor whiteColor];
     }
     return self;
 }
@@ -42,7 +40,6 @@
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
-    NSLog(@"I Started Drawing");
     for(MVMDCountry *country in self.countries){
         
         if(country.borders){
@@ -61,22 +58,28 @@
 
 
 -(CGPoint)translateCoodinatesToCGPointWithLongitude:(CGFloat)longitude andLatitude: (CGFloat)latitude{
+    CGFloat width = self.maximumLongitude - self.minimumLongitude;
+    CGFloat height = self.maximumLatitude - self.minimumLatitude;
     CGFloat trueLongitude;
     CGFloat trueLatitude;
     if(longitude > 0){
         trueLongitude = fabsf(self.minimumLongitude) + longitude;
+        trueLongitude = (trueLongitude*320)/width;
     }
     else{
         trueLongitude = self.minimumLongitude - longitude;
+        trueLongitude = (trueLongitude*320)/width;
     }
     if(latitude > 0){
         trueLatitude = self.maximumLatitude - latitude;
+        trueLatitude = (trueLatitude*568)/height;
     }
     else{
         trueLatitude = self.maximumLatitude + fabsf(latitude);
+        trueLatitude = (trueLatitude*568)/height;
     }
-    
-    return CGPointMake(longitude, latitude);
+    NSLog(@"True values are %f and %f", trueLongitude, trueLatitude);
+    return CGPointMake(trueLongitude, trueLatitude);
 }
 
 -(void)drawPolygonFromArrayOfPoints:(NSArray *)array withColour:(UIColor *) color{

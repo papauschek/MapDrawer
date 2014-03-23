@@ -22,11 +22,13 @@
     [super viewDidLoad];
     MVMDDrawingData *dd = [[MVMDDrawingData alloc] init];
     
-    CGRect  viewRect = CGRectMake(0, 0, fabsf([dd.maximumLongitude floatValue]) + fabsf([dd.minimumLongitude floatValue]),fabsf([dd.maximumLatitude floatValue]) + fabsf([dd.minimumLatitude floatValue]));
+    //CGRect  viewRect = CGRectMake(0, 0, fabsf([dd.maximumLongitude floatValue]) + fabsf([dd.minimumLongitude floatValue]),fabsf([dd.maximumLatitude floatValue]) + fabsf([dd.minimumLatitude floatValue]));
+    CGRect viewRect = CGRectMake(0, 0, 320, 568);
     MVMDMapView* myView = [[MVMDMapView alloc] initWithFrame:viewRect andData:dd];
     
     self.scrollView.contentSize = myView.bounds.size;
     [self.scrollView addSubview:myView];
+    [myView setNeedsDisplay];
 	// Do any additional setup after loading the view, typically from a nib.
     
 }
