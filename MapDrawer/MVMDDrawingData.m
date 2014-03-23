@@ -9,6 +9,18 @@
 #import "MVMDDrawingData.h"
 #import "MVMDCountry.h"
 
+static const NSString *jsonPath = @"countries_small";
+static const NSString *fileFormat = @"geojson";
+static const NSString *boundaryBox = @"bbox";
+static const NSString *features = @"features";
+static const NSString *properties = @"properties";
+static const NSString *name = @"name";
+static const NSString *geometry = @"geometry";
+static const NSString *objType = @"type";
+static const NSString *pointCoordinates = @"coordinates";
+static const NSString *polygon = @"Polygon";
+static const NSString *multiPolygon =@"MultiPolygon";
+
 @implementation MVMDDrawingData
 
 -(id)init{
@@ -23,15 +35,15 @@
 -(void)extractUsefulInformation{
     
     NSError *error;
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"countries_small" ofType:@"geojson"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonPath ofType:fileFormat];
     NSData *JSONData = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&error];
     id dataObject = [NSJSONSerialization JSONObjectWithData:JSONData options:NSJSONReadingAllowFragments error:&error];
     if([dataObject isKindOfClass:[NSDictionary class]]){
-        [self setMapBoundariesFrom:[dataObject objectForKey:@"bbox"]];
-        for (NSDictionary* countryData in [dataObject objectForKey:@"features"]){
+        [self setMapBoundariesFrom:[dataObject objectForKey:boundaryBox]];
+        for (NSDictionary* countryData in [dataObject objectForKey:features]){
             MVMDCountry *country = [[MVMDCountry alloc] init];
-            country.name = [[countryData objectForKey:@"properties"] objectForKey:@"name"];
-            [self setCountryBordersAndHolesFrom:[countryData objectForKey:@"geometry"] to:country];
+            country.name = [[countryData objectForKey:properties] objectForKey:name];
+            [self setCountryBordersAndHolesFrom:[countryData objectForKey:geometry] to:country];
             [self.countries addObject:country];
         }
     }
@@ -51,10 +63,10 @@
 -(void)setCountryBordersAndHolesFrom:(NSDictionary *)geometry to:(MVMDCountry *)country{
     NSMutableArray *borders = [[NSMutableArray alloc] init];
     NSMutableArray *holes;
-    NSString *type = [geometry objectForKey:@"type"];
-    NSArray *coordinates = [geometry objectForKey:@"coordinates"];
+    NSString *type = [geometry objectForKey:objType];
+    NSArray *coordinates = [geometry objectForKey:pointCoordinates];
     
-    if([type isEqualToString:@"Polygon"]){
+    if([type isEqualToString:polygon]){
         
         [borders addObject:[coordinates objectAtIndex:0]];
         if([coordinates count] > 1){
@@ -63,7 +75,7 @@
                 [holes addObject:[coordinates objectAtIndex:i]];
             }
         }
-    }else if([type isEqualToString:@"MultiPolygon"]){
+    }else if([type isEqualToString:multiPolygon]){
         for(NSArray* array in coordinates){
             [borders addObject:[array objectAtIndex:0]];
             if([array count] > 1){

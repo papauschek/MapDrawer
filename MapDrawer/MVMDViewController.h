@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MVMDMapView.h"
 
 @interface MVMDViewController : UIViewController <UIScrollViewDelegate>
-
+@property (strong, nonatomic) MVMDMapView* myView;
 -(UIImage *)drawCountriesWithData:(NSArray *)countries;
 
 @end

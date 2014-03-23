@@ -22,19 +22,21 @@
     [super viewDidLoad];
     MVMDDrawingData *dd = [[MVMDDrawingData alloc] init];
     
-    //CGRect  viewRect = CGRectMake(0, 0, fabsf([dd.maximumLongitude floatValue]) + fabsf([dd.minimumLongitude floatValue]),fabsf([dd.maximumLatitude floatValue]) + fabsf([dd.minimumLatitude floatValue]));
     CGRect viewRect = CGRectMake(0, 0, 2000, 2000);
-    MVMDMapView* myView = [[MVMDMapView alloc] initWithFrame:viewRect andData:dd];
+    self.myView = [[MVMDMapView alloc] initWithFrame:viewRect andData:dd];
     
-    self.scrollView.contentSize = myView.bounds.size;
-    [self.scrollView addSubview:myView];
+    self.scrollView.contentSize = self.myView.bounds.size;
+    [self.scrollView addSubview:self.myView];
     self.scrollView.delegate = self;
-    [myView setNeedsDisplay];
-    self.scrollView.minimumZoomScale = self.scrollView.frame.size.width / myView.frame.size.width;
-     self.scrollView.maximumZoomScale = 2.0;
+    [self.myView setNeedsDisplay];
+    self.scrollView.minimumZoomScale = 0.3;
+     self.scrollView.maximumZoomScale = 4.0;
     [ self.scrollView setZoomScale: self.scrollView.minimumZoomScale];
-	// Do any additional setup after loading the view, typically from a nib.
+
     
+}
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return self.myView;
 }
 
 - (void)didReceiveMemoryWarning
