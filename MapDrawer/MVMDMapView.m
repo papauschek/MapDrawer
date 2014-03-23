@@ -36,9 +36,16 @@
 {
     // Drawing code
     for(NSArray *country in self.countries){
-        if([country.holes count] > 1){
-            for(NSArray *borders in country.borders){
-                
+        NSArray *borders = [country objectAtIndex:1];
+        NSArray *holes = [country objectAtIndex:2];
+        if([borders count] > 1){
+            for(NSArray *border in borders){
+                //code translating the coordinates here
+            }
+        }
+        if(holes){
+            for(NSArray *hole in holes){
+                //more code translation and drawing
             }
         }
     }
