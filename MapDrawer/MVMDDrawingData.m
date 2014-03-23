@@ -31,7 +31,7 @@
         for (NSDictionary* countryData in [dataObject objectForKey:@"features"]){
             MVMDCountry *country = [[MVMDCountry alloc]init];
             country.name = [[countryData objectForKey:@"properties"] objectForKey:@"name"];
-         
+            [self setCountryBordersAndHolesFrom:[countryData objectForKey:@"geometry"] to:country];
             [self.countries addObject:country];
         }
     }
@@ -44,6 +44,26 @@
     self.maximumLatitude  = [boundaryBox objectAtIndex:3];
 }
 
+-(void)setCountryBordersAndHolesFrom:(NSDictionary *)geometry to:(MVMDCountry *)country{
+    NSMutableArray *borders = [[NSMutableArray alloc]init];
+    NSMutableArray *holes = [[NSMutableArray alloc]init];
+    NSString *type = [geometry objectForKey:@"type"];
+    NSArray *coordinates = [geometry objectForKey:@"coordinates"];
+    
+    if([type isEqualToString:@"Polygon"]){
+        
+        [borders addObject:[coordinates objectAtIndex:0]];
+        if([coordinates count] > 1){
+            for(int i = 1; i<[coordinates count]; i++){
+                [holes addObject:[coordinates objectAtIndex:i]];
+            }
+        }
+    }else if([type isEqualToString:@"MultiPolygon"]){
+        
+    }
+    country.borders = borders;
+    country.holes = holes;
+}
 
 
 @end

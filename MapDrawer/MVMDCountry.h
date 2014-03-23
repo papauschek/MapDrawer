@@ -11,7 +11,7 @@
 @interface MVMDCountry : NSObject
 
 @property (nonatomic) NSString* name;
-@property (nonatomic, strong) NSMutableArray* borders;
-@property (nonatomic, strong) NSMutableArray* holes;
+@property (nonatomic, strong) NSArray* borders;
+@property (nonatomic, strong) NSArray* holes;
 
 @end
