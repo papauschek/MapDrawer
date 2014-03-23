@@ -46,7 +46,7 @@
 
 -(void)setCountryBordersAndHolesFrom:(NSDictionary *)geometry to:(MVMDCountry *)country{
     NSMutableArray *borders = [[NSMutableArray alloc]init];
-    NSMutableArray *holes = [[NSMutableArray alloc]init];
+    NSMutableArray *holes;
     NSString *type = [geometry objectForKey:@"type"];
     NSArray *coordinates = [geometry objectForKey:@"coordinates"];
     
@@ -54,6 +54,7 @@
         
         [borders addObject:[coordinates objectAtIndex:0]];
         if([coordinates count] > 1){
+            holes = [[NSMutableArray alloc]init];
             for(int i = 1; i<[coordinates count]; i++){
                 [holes addObject:[coordinates objectAtIndex:i]];
             }
@@ -62,6 +63,7 @@
         for(NSArray* array in coordinates){
             [borders addObject:[array objectAtIndex:0]];
             if([array count] > 1){
+                holes = [[NSMutableArray alloc]init];
                 for(int i = 1; i<[array count]; i++){
                     [holes addObject:[array objectAtIndex:i]];
                 }

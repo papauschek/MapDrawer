@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MVMDDrawingData.h"
+
 
 @interface MVMDMapView : UIView
 
+@property (nonatomic, strong) NSArray* countries;
 @end
