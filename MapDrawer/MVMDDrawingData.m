@@ -9,7 +9,7 @@
 #import "MVMDDrawingData.h"
 #import "MVMDCountry.h"
 
-// Used instead of define because static variables are used at runtime instead of compiling time.
+// Defined all JSON keys here to prevent future errors should keys change, by having a define once approach.
 static const NSString *jsonPath = @"countries_small";
 static const NSString *fileFormat = @"geojson";
 static const NSString *boundaryBox = @"bbox";
