@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MVMDMapView.h"
+@class MVMDMapView;
 
 @interface MVMDViewController : UIViewController <UIScrollViewDelegate>
 @property (strong, nonatomic) MVMDMapView* myView; //View where the map will be drawn

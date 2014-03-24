@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MVMDDrawingData.h"
+
+@class MVMDDrawingData;
 
 
 @interface MVMDMapView : UIView

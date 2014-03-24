@@ -10,17 +10,17 @@
 #import "MVMDCountry.h"
 
 // Defined all JSON keys here to prevent future errors should keys change, by having a define once approach.
-static const NSString *jsonPath = @"countries_small";
-static const NSString *fileFormat = @"geojson";
-static const NSString *boundaryBox = @"bbox";
-static const NSString *features = @"features";
-static const NSString *properties = @"properties";
-static const NSString *name = @"name";
-static const NSString *geometry = @"geometry";
-static const NSString *objType = @"type";
-static const NSString *pointCoordinates = @"coordinates";
-static const NSString *polygon = @"Polygon";
-static const NSString *multiPolygon =@"MultiPolygon";
+static NSString * const jsonPath = @"countries_small";
+static NSString * const fileFormat = @"geojson";
+static NSString * const boundaryBox = @"bbox";
+static NSString * const features = @"features";
+static NSString * const properties = @"properties";
+static NSString * const name = @"name";
+static NSString * const geometry = @"geometry";
+static NSString * const objType = @"type";
+static NSString * const pointCoordinates = @"coordinates";
+static NSString * const polygon = @"Polygon";
+static NSString * const multiPolygon =@"MultiPolygon";
 
 @implementation MVMDDrawingData
 
@@ -28,14 +28,14 @@ static const NSString *multiPolygon =@"MultiPolygon";
     self = [super init];
     if(self != nil) {
         self.countries = [[NSMutableArray alloc] init];
-        [self extractUsefulInformation];
+        [self loadCountries];
     }
     return self;
 }
 
--(void)extractUsefulInformation{
+-(void)loadCountries{
     
-    // It extrans the information from the GeoJSON file. This info is the map boundaries, the countries and its respective borders and 'holes'
+    // It extracts the information from the GeoJSON file. This information is the map boundaries, the countries and its respective borders and 'holes'
     NSError *error;
     NSString *filePath = [[NSBundle mainBundle] pathForResource:jsonPath ofType:fileFormat];
     NSData *JSONData = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&error];
@@ -47,20 +47,21 @@ static const NSString *multiPolygon =@"MultiPolygon";
         if([dataObject objectForKey:features]){
             for (NSDictionary* countryData in [dataObject objectForKey:features]){
                 MVMDCountry *country = [[MVMDCountry alloc] init];
-                country.name = [[countryData objectForKey:properties] objectForKey:name]; // Name is here mainly for debugging purposes
+                country.name = [[countryData objectForKey:properties] objectForKey:name]; // Name is here for possible future use
                 [self setCountryBordersAndHolesFrom:[countryData objectForKey:geometry] to:country];
                 [self.countries addObject:country];
             }
         }
     }
     
-    //Use this piece of code to sort out the problem of Lesotho
+    //Use this piece of code to solve the issue involving countries inside the area of other i.e Lesotho inside SouthAfrica
+    //It sorts the list with a very basic guess of which country is bigger depending on the number of points and draws the bigger ones first
     [self.countries sortUsingComparator:^NSComparisonResult(MVMDCountry *obj1, MVMDCountry *obj2) {
         return [obj1 getArea] < [obj2 getArea];
     }];
 }
 
-//Sets up the values as the boundaries
+//Sets up the boundaries with information from the JSON object
 -(void)setMapBoundariesFrom:(NSArray *)boundaryBox{
     self.minimumLongitude = [boundaryBox objectAtIndex:0];
     self.minimumLatitude  = [boundaryBox objectAtIndex:1];
@@ -68,7 +69,7 @@ static const NSString *multiPolygon =@"MultiPolygon";
     self.maximumLatitude  = [boundaryBox objectAtIndex:3];
 }
 
-//This code splits the regions in the json based on whether they're regions of the country or 'holes in it' and assign them to its respective country
+//This code splits the regions in the json based on whether they're regions of the country or 'holes in it' and saves them into their own Array inside the MVMDCountry object
 -(void)setCountryBordersAndHolesFrom:(NSDictionary *)geometry to:(MVMDCountry *)country{
     NSMutableArray *borders = [[NSMutableArray alloc] init];
     NSMutableArray *holes;
